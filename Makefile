@@ -3,7 +3,10 @@ CERT_PASS=password
 REPO=fluentd-secure
 
 run: cert
-	docker run --rm -v $(PWD)/cert:$(CERT_PATH) $(REPO)
+	docker run --rm -d \
+		-p 24224:24224 -p 24224:24224/udp \
+		-v $(PWD)/data:/fluentd/log -v $(PWD)/cert:$(CERT_PATH) \
+		$(REPO)
 
 build:
 	docker build -t $(REPO) .
