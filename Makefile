@@ -5,10 +5,13 @@ CERT_PASS=password
 REPO=fluentd-secure
 
 run: etc/cert
-	docker run --rm \
+	docker run --rm -d \
 		-p 24224:24224 -p 24224:24224/udp -p 24284:24284 \
 		-v $(PWD)/log:/fluentd/log -v $(HOST_ETC_PATH):$(ETC_PATH) \
-		$(REPO)
+		$(REPO) > run
+
+stop:
+	docker stop $$(cat run) && rm run
 
 build:
 	docker build -t $(REPO) .
